@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
+
+from src.internal.bills.use_cases.list_bills import get_bills_use_case
 
 html_router = APIRouter()
 
@@ -19,4 +21,15 @@ async def home(request: Request):
         request=request,
         name="posts/index.html",
         context={"items": ["item1", "item2", "item3"]},
+    )
+
+
+@html_router.get("/bills", response_class=HTMLResponse)
+async def bills(request: Request, list_bills_use_case=Depends(get_bills_use_case)):
+    bills = list_bills_use_case.execute()
+
+    return templates.TemplateResponse(
+        request=request,
+        name="bills/index.html",
+        context={"bills": bills},
     )

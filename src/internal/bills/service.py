@@ -1,0 +1,19 @@
+from fastapi import Depends
+from sqlmodel import Session, select
+from src.database.db import get_session
+from src.internal.bills.schema import BillOutput
+from src.internal.bills.model import Bill
+
+
+class BillsService:
+    def __init__(self, DBSession: Session):
+        self.DBSession = DBSession
+
+    def list_bills(self) -> list[BillOutput]:
+        all_bills = self.DBSession.exec(select(Bill).order_by(Bill.id)).all()
+
+        return all_bills
+
+
+def get_bills_service(session: Session = Depends(get_session)) -> BillsService:
+    return BillsService(DBSession=session)
