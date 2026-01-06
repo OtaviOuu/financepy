@@ -1,4 +1,5 @@
-from src.internal.posts.service import PostsService
+from src.internal.posts.service import PostsService, get_post_service
+from fastapi import Depends
 
 
 class ListPostsUseCase:
@@ -7,3 +8,9 @@ class ListPostsUseCase:
 
     def execute(self):
         return self.posts_service.list_posts()
+
+
+def get_list_posts_use_case(
+    posts_service: PostsService = Depends(get_post_service),
+) -> ListPostsUseCase:
+    return ListPostsUseCase(posts_service=posts_service)

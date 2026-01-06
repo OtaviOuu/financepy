@@ -1,18 +1,14 @@
 from fastapi import APIRouter, Depends
 
-from src.internal.posts.use_cases.create_post import CreatePostUseCase
-from src.internal.posts.use_cases.list_posts import ListPostsUseCase
-from src.internal.posts.service import get_post_service
+from src.internal.posts.use_cases.create_post import (
+    CreatePostUseCase,
+    get_create_post_use_case,
+)
+from src.internal.posts.use_cases.list_posts import (
+    ListPostsUseCase,
+    get_list_posts_use_case,
+)
 from src.internal.posts.schemas import PostOutput, PostInput
-
-
-def get_create_post_use_case():
-    return CreatePostUseCase(post_service=get_post_service())
-
-
-def get_list_posts_use_case():
-    return ListPostsUseCase(post_service=get_post_service())
-
 
 restRouter = APIRouter()
 
@@ -29,4 +25,4 @@ async def create_post(
 async def list_posts(
     list_posts_use_case: ListPostsUseCase = Depends(get_list_posts_use_case),
 ) -> list[PostOutput]:
-    return await list_posts_use_case.execute()
+    return list_posts_use_case.execute()
