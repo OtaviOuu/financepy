@@ -27,9 +27,10 @@ async def home(request: Request):
 @html_router.get("/bills", response_class=HTMLResponse)
 async def bills(request: Request, list_bills_use_case=Depends(get_bills_use_case)):
     bills = list_bills_use_case.execute()
-
+    labels = [bill.name for bill in bills]
+    data = [bill.amount for bill in bills]
     return templates.TemplateResponse(
         request=request,
         name="bills/index.html",
-        context={"bills": bills},
+        context={"bills": bills, "labels": labels, "data": data},
     )
