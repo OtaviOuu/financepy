@@ -1,16 +1,11 @@
 from fastapi import FastAPI, Depends
 
 
-from src.auth import handle_api_key
 from src.routes.rest import restRouter
 from src.routes.html import html_router
 from src.database.db import init_db
 
-app = FastAPI(
-    dependencies=[
-        Depends(handle_api_key),
-    ]
-)
+app = FastAPI()
 init_db()
 
 

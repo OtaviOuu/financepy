@@ -4,11 +4,11 @@ from fastapi import Depends
 
 
 class ListBillsUseCase:
-    def __init__(self, bills_service):
+    def __init__(self, bills_service: BillsService):
         self.bills_service = bills_service
 
-    def execute(self) -> list[BillOutput]:
-        return self.bills_service.list_bills()
+    def execute(self, user_id: int) -> list[BillOutput]:
+        return self.bills_service.list_bills(user_id=user_id)
 
 
 def get_bills_use_case(

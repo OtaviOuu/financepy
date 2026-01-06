@@ -6,8 +6,8 @@ class ListPostsUseCase:
     def __init__(self, posts_service: PostsService):
         self.posts_service = posts_service
 
-    def execute(self):
-        return self.posts_service.list_posts()
+    def execute(self, user_id: int) -> list:
+        return self.posts_service.list_posts(user_id=user_id)
 
 
 def get_list_posts_use_case(
