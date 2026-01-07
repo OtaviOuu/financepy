@@ -7,6 +7,7 @@ from src.internal.bills.use_cases.list_bills import get_bills_use_case, ListBill
 
 html_router = APIRouter()
 
+
 templates = Jinja2Templates(directory="./src/templates/")
 
 
@@ -24,7 +25,10 @@ async def home(request: Request):
     )
 
 
-@html_router.get("/bills", response_class=HTMLResponse)
+bills_html_router = APIRouter(prefix="/bills", tags=["bills"])
+
+
+@bills_html_router.get("/", response_class=HTMLResponse)
 async def bills(
     request: Request,
     list_bills_use_case: ListBillsUseCase = Depends(get_bills_use_case),
@@ -38,3 +42,6 @@ async def bills(
         name="bills/index.html",
         context={"bills": bills, "labels": labels, "data": data},
     )
+
+
+html_router.include_router(bills_html_router)
