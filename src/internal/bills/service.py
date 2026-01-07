@@ -9,7 +9,7 @@ class BillsService:
         self.bill_repository = bill_repository
 
     def list_bills(self, user_id: int) -> list[BillOutput]:
-        return []
+        return self.bill_repository.list_bills(user_id=user_id)
 
     def create_bill(self, bill_input: BillInput, user: ApiUser) -> BillOutput:
         return self.bill_repository.create(bill_input=bill_input, user=user)

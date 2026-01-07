@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
-from src.internal.bills.use_cases.list_bills import get_bills_use_case
+from src.internal.bills.use_cases.list_bills import get_bills_use_case, ListBillsUseCase
 
 html_router = APIRouter()
 
@@ -25,8 +25,12 @@ async def home(request: Request):
 
 
 @html_router.get("/bills", response_class=HTMLResponse)
-async def bills(request: Request, list_bills_use_case=Depends(get_bills_use_case)):
-    bills = list_bills_use_case.execute()
+async def bills(
+    request: Request,
+    list_bills_use_case: ListBillsUseCase = Depends(get_bills_use_case),
+):
+    bills = list_bills_use_case.execute(user_id=1)
+    print(bills)
     labels = [bill.name for bill in bills]
     data = [bill.amount for bill in bills]
     return templates.TemplateResponse(
